@@ -1,69 +1,194 @@
-# coding: utf-8
+# Equanto existir vértice não associado a algum hub, faça:
+# 	2.1. escolher o vertice V mais próximo
+# 		2.1.1 V ainda não foi atribuido a nenhum hub
+# 		2.1.2 V nao ultrapassa a capacidade do hub
+# 	2.2. atribuir V ao respectivo hub
+# 		2.2.1 atualizar a capacidade do hub
 
-import googlemaps
-import json
-import pandas as pd
-import numpy as np
-from openpyxl import Workbook
-from datetime import datetime
+import read_json as rj
+import read_txt as rt
+from hubs import *
 
-# # 50 primeiras instancias do arq cvrp1-rj-90.json
-#  criar um arquivo com os ids da instância  e as id dos pontos da base
-# média de tempo de execução com 50 instâncias (7 minutos)
-instancias = 50
+#funcao para descobrir quantos hubs vou precisar?
+#faz a soma dos tamanhoa
+#pega os maiores tamanhos
+#subtrai do valor total
+#se os hubs
 
-gmaps = googlemaps.Client(key='AIzaSyDWH2mM7H8NT0QEtJt79lg6jg_ourgB0Cw')
+def index(sizes):
+    ind = []
+    aux = sizes[:]
+    n = biggest_value(aux)
+    ind.append(n)
+    aux[n] = 1
 
-colunas = ['Distancia']
-matriz = pd.DataFrame(columns=colunas)
+    for b in range(len(sizes)):
+        if b not in ind:
+            n = biggest_value(aux)
+            if len(ind) < 3:
+                ind.append(n)
+                aux[n] = 1
 
-
-def ler_json(arq_json):
-    with open(arq_json, 'r') as f:
-        return json.load(f)
-
-
-
-data = ler_json('arquivo.json')
-
-capacity = data['vehicle_capacity']
-deliveries = data['deliveries']
-
-time = datetime.now()
-
-
-def create_relation():
-    arc = ('arquivos/dados-relacao-ids-' + time.strftime("%m-%d-%Y") + '.txt')
-    with open(arc, 'w') as file:
-        file.write(time.strftime("%m-%d-%Y-%H:%M\n"))
-        file.write('CHAVE ---->  ID \n')
-        i = 0
-        for id in deliveries:
-            file.write(str(i) + '\t ----> \t' + str(id['id']) + '\n')
-            i = i + 1
-        print(i)
+    return ind    #retorna lista de index dos maiores valores
 
 
 
-def create_routes():
-    arc = ('arquivos/dados-distancia-' + time.strftime("%m-%d-%Y") + '.txt')
 
-    with open(arc, 'w') as file:
-        file.write(time.strftime("%m-%d-%Y-%H:%M\n"))
-        file.write(str(instancias) + '\n')
-        file.write(str(capacity) + "\n")
-        for size in deliveries:
-            file.write(str(size['size']) + "\n")
-        for location in deliveries:
-            for comp in deliveries:
-                consulta = gmaps.distance_matrix(
-                    (location['point']['lat'], location['point']['lng']),
-                    (comp['point']['lat'], comp['point']['lng']))
-                distancia = consulta['rows'][0]['elements'][0]['distance']['text']
-                file.write(str(distancia) + "\t\t\t\t\t")
-            file.write('\n')
+def biggest_value(sizes): #choose hub with the biggest size
+    biggest = 0;
+    index = 0
+    for i in range(len(sizes)):
+        if int(sizes[i]) >= biggest:
+            biggest = int(sizes[i])
+            index = i
+
+    return index
+    #retorna index
+
+
+#funcao para ver se tem vertice não associado
+
+
+
+
+
+
+def lowestvalue(arrayvalores):
+    lv = 1
+    print()
+    if arrayvalores[0] > 1:
+        lowerv = arrayvalores[0]
+    else:
+        lowerv = 10000000
+    for i in range(len(arrayvalores)):
+        if arrayvalores[i] < lowerv:
+            if arrayvalores[i] > lv:
+                lowerv = arrayvalores[i]
+
+    return arrayvalores.index(lowerv)
+#     retorna o index pro item ser removido
+
+
+
+''' caixeiro viajante problem
+def greedy(list_instance):
+
+    for i in range(len(list_instance)):
+        aux_instance = list_instance[i]['distancias'].copy()
+        for n in range(len(aux_instance)):
+            aux = aux_instance[n].strip("km ")
+            aux_instance[n] = aux
+
+    #criar um dicionario de listas e  retornar os menores valores
+    array_valores = [[12.1, 34, 1, 45, 2.4], [4, 7, 8.9, 1, 56.2], [2.5, 65, 6.7, 1, 10], [5.2, 1, 72, 39, 6.2],
+                     [1, 72, 1.9, 24, 50]]
+
+    array_index = []
+    for i in range(len(array_valores)):
+        index = lowestvalue(array_valores[i])
+        while(index not in array_index):
+            for n in range(len(array_valores)):
+                array_valores[n][index]= 1
+
+            array_index.append(index)
+
+
+    return array_index
+
+'''
+
+
+
 
 
 if __name__ == '__main__':
-    create_relation()
-    create_routes()
+
+    # rj.create_relation()
+    # rj.create_routes()
+
+
+    # qntd instancias, capacidade total, tamanho de cada instancia(lista), distancias entrepontos(lista de listas)
+    list_instance = []
+    list = rt.reader_dist() #retorna distancias
+    ids_list = rt.read_id(list[0]) #retorna os ids
+    ind_list = index(list[2])
+
+
+    # preenche uma lista com os objetos vertices
+    vertices = []
+    for v in range(list[0]):
+        #id, id_real, linked, size
+        vertice = Vertice(v, ids_list[v], 0, list[2][v], 0)
+        vertices.append(vertice)
+        vertices[v].distancias.append(list[3][v])
+        #Vertice.print_vertice(vertices[v])
+
+
+    for i in range(len(ind_list)):
+        vertices[ind_list[i]].hub = 1
+        vertices[ind_list[i]].linked = -1
+
+    # for v in range(list[0]):
+    #     Vertice.print_vertice(vertices[v])
+
+    for i in range(len(ind_list)):
+        aux = vertices[ind_list[i]].size
+        #verificar se ainda tem um vetor para associar
+
+    sum = 0
+    for i in range(list[0]):
+        if vertices[i].linked == 0:
+            sum += 1
+
+
+
+
+
+    #Vertice.print_vertice(vertices[hub_index])
+
+
+
+
+
+
+'''
+    veiculos = []
+    qtd_veiculos = 6
+    ids_real = []
+    sizes = []
+    distancias = []
+    vertices = []
+    for v in range(0, instancias):
+        vertice = Vertice(v, ids_real[v], 0, sizes[v])
+        vertices.append(vertice)
+        vertices[v].distancias.append(distancias[v])
+'''
+
+'''
+    path_taken = []
+
+
+    # qntd instancias, capacidade total, tamanho de cada instancia(lista), distancias entrepontos(lista de listas)
+    #list = [dt, inst, cp, sztotal, list_dist]
+    tamL = list[1]
+    capacity = list[2]
+    sizeofeach = list[3]
+
+    for i in range(len(list[4])):
+        #print(instance)
+        instance['ponto'] = i
+        instance['distancias'] = list[4][i]
+        #print(instance)
+        list_instance.append(instance.copy())
+
+
+    #print(list_instance)
+
+    path_taken = greedy(list_instance)
+    print(path_taken)
+'''
+
+
+
+
+
