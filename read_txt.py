@@ -32,29 +32,3 @@ def read_id(instancias):
 
     return ids_list
 
-
-'''
-          dt = f.readline().strip('\n')
-          inst = f.readline().strip('\n')
-          cp = f.readline().strip('\n')
-          sztotal = f.readlines(22)
-          for index in range(len(sztotal)):
-              sztotal[index] = sztotal[index].rstrip('\n')
-
-          
-
-        #lendo a matriz de distancia
-          aux_distan = f.readlines()
-          n = len(aux_distan)
-          i = 0
-          list_dist = []
-          while i < n:
-              vet_aux = aux_distan[i]
-              vet_aux = vet_aux.split('\t')
-              i+=1
-              list_dist.append(vet_aux)
-
-          # data arq, qntd instancias, capacidade total, tamanho de cada instancia(lista), distancias entrepontos(lista de listas)
-          list = [dt, inst, cp, sztotal, list_dist]
-          return list 
-'''

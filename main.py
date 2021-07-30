@@ -4,18 +4,25 @@
 # 		2.1.2 V nao ultrapassa a capacidade do hub
 # 	2.2. atribuir V ao respectivo hub
 # 		2.2.1 atualizar a capacidade do hub
-
+import copy
 import read_json as rj
 import read_txt as rt
-from hubs import *
+from hubs import Vertice
 
-#funcao para descobrir quantos hubs vou precisar?
-#faz a soma dos tamanhoa
-#pega os maiores tamanhos
-#subtrai do valor total
-#se os hubs
 
-def index(sizes):
+def not_linked(vertices):
+    contador = 0
+    for z in range(len(vertices)):
+        if vertices[z].linked != 0:
+            contador += 1
+
+    if contador == len(vertices):
+        return 1
+    else:
+        return 0
+
+
+def indexx(sizes):
     ind = []
     aux = sizes[:]
     n = biggest_value(aux)
@@ -46,56 +53,20 @@ def biggest_value(sizes): #choose hub with the biggest size
     #retorna index
 
 
-#funcao para ver se tem vertice não associado
+#funcao para determinar qual hub tem a menor distancia para o vertice
+#recebe lista dos indexes dos hubs
+#retorna index do hub de menor distancia
 
+#vertices_distancia = vertice[n].distancia[0]
+def small_distance(hubs_index, vertices_distancia):
+    lowest = float(1000)
+    indice = 0
+    for i in range(len(hubs_index)):
+        if float(vertices_distancia[hubs_index[i]]) < lowest and float(vertices_distancia[hubs_index[i]]) > -1:
+            lowest = float(vertices_distancia[hubs_index[i]])
+            indice = hubs_index[i]
 
-
-
-
-
-def lowestvalue(arrayvalores):
-    lv = 1
-    print()
-    if arrayvalores[0] > 1:
-        lowerv = arrayvalores[0]
-    else:
-        lowerv = 10000000
-    for i in range(len(arrayvalores)):
-        if arrayvalores[i] < lowerv:
-            if arrayvalores[i] > lv:
-                lowerv = arrayvalores[i]
-
-    return arrayvalores.index(lowerv)
-#     retorna o index pro item ser removido
-
-
-
-''' caixeiro viajante problem
-def greedy(list_instance):
-
-    for i in range(len(list_instance)):
-        aux_instance = list_instance[i]['distancias'].copy()
-        for n in range(len(aux_instance)):
-            aux = aux_instance[n].strip("km ")
-            aux_instance[n] = aux
-
-    #criar um dicionario de listas e  retornar os menores valores
-    array_valores = [[12.1, 34, 1, 45, 2.4], [4, 7, 8.9, 1, 56.2], [2.5, 65, 6.7, 1, 10], [5.2, 1, 72, 39, 6.2],
-                     [1, 72, 1.9, 24, 50]]
-
-    array_index = []
-    for i in range(len(array_valores)):
-        index = lowestvalue(array_valores[i])
-        while(index not in array_index):
-            for n in range(len(array_valores)):
-                array_valores[n][index]= 1
-
-            array_index.append(index)
-
-
-    return array_index
-
-'''
+    return indice
 
 
 
@@ -111,9 +82,10 @@ if __name__ == '__main__':
     list_instance = []
     list = rt.reader_dist() #retorna distancias
     ids_list = rt.read_id(list[0]) #retorna os ids
-    ind_list = index(list[2])
+    ind_list = indexx(list[2])
 
-
+    copy_indlist = ind_list[:]
+    print(copy_indlist)
     # preenche uma lista com os objetos vertices
     vertices = []
     for v in range(list[0]):
@@ -121,7 +93,6 @@ if __name__ == '__main__':
         vertice = Vertice(v, ids_list[v], 0, list[2][v], 0)
         vertices.append(vertice)
         vertices[v].distancias.append(list[3][v])
-        #Vertice.print_vertice(vertices[v])
 
 
     for i in range(len(ind_list)):
@@ -131,64 +102,35 @@ if __name__ == '__main__':
     # for v in range(list[0]):
     #     Vertice.print_vertice(vertices[v])
 
-    for i in range(len(ind_list)):
-        aux = vertices[ind_list[i]].size
-        #verificar se ainda tem um vetor para associar
-
-    sum = 0
-    for i in range(list[0]):
-        if vertices[i].linked == 0:
-            sum += 1
+    for v in range(list[0]):
+        Vertice.print_vertice(vertices[v])
 
 
+    print(len(vertices))
+    f_index = []
+    for i in range(len(vertices)):
+        #se for um hub pula pro proximo
+        #ir no vertice i veriricar qual a menor distancia dentre os tres hubs
+        #enquanto o vertice nao estiver linkado
+        #achou a menor distancia verificar se naquele hub ainda tem espaço
+            #se tiver linka
+            #se nao pula para o proximo hub
+                #remove elemento da lista e chama a funcao q encontra o menor valor entre aquela nova lista
+        # vertices_distancia = vertice[n].distancia[0]
+        #lista de index que nao cabem mais nada
+        if i not in ind_list:
+            n = small_distance(ind_list, vertices[i].distancias[0])
+            copy_indlist = ind_list[:]
+            while vertices[i].linked == 0:
+                if vertices[n].size >= vertices[i].size:  #se o size do hub for maior q o size do vertice
+                    vertices[i].linked = n
+                    vertices[n].size -= vertices[i].size
+                else:
+                    remove = copy_indlist.index(n)
+                    copy_indlist.pop(remove)
+                    n = small_distance(copy_indlist, vertices[i].distancias[0])
+        else:
+            print('hub')
 
-
-
-    #Vertice.print_vertice(vertices[hub_index])
-
-
-
-
-
-
-'''
-    veiculos = []
-    qtd_veiculos = 6
-    ids_real = []
-    sizes = []
-    distancias = []
-    vertices = []
-    for v in range(0, instancias):
-        vertice = Vertice(v, ids_real[v], 0, sizes[v])
-        vertices.append(vertice)
-        vertices[v].distancias.append(distancias[v])
-'''
-
-'''
-    path_taken = []
-
-
-    # qntd instancias, capacidade total, tamanho de cada instancia(lista), distancias entrepontos(lista de listas)
-    #list = [dt, inst, cp, sztotal, list_dist]
-    tamL = list[1]
-    capacity = list[2]
-    sizeofeach = list[3]
-
-    for i in range(len(list[4])):
-        #print(instance)
-        instance['ponto'] = i
-        instance['distancias'] = list[4][i]
-        #print(instance)
-        list_instance.append(instance.copy())
-
-
-    #print(list_instance)
-
-    path_taken = greedy(list_instance)
-    print(path_taken)
-'''
-
-
-
-
-
+    for v in range(list[0]):
+        Vertice.print_vertice(vertices[v])
