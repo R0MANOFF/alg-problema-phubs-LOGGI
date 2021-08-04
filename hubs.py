@@ -17,3 +17,11 @@ class Vertice():
     else:
       return 0
 
+class Hub():
+  def __init__(self, id, capacity, vertices):
+    self.id = id
+    self.capacity = capacity
+    self.vertices = vertices
+
+  def print_hubs(self):
+    print(self.id, self.capacity, self.vertices)

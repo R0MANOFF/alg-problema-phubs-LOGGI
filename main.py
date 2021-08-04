@@ -5,9 +5,9 @@
 # 	2.2. atribuir V ao respectivo hub
 # 		2.2.1 atualizar a capacidade do hub
 import copy
-import read_json as rj
+#import read_json as rj
 import read_txt as rt
-from hubs import Vertice
+from hubs import Vertice, Hub
 
 
 def not_linked(vertices):
@@ -32,7 +32,7 @@ def indexx(sizes):
     for b in range(len(sizes)):
         if b not in ind:
             n = biggest_value(aux)
-            if len(ind) < 3:
+            if len(ind) < 2:
                 ind.append(n)
                 aux[n] = 1
 
@@ -83,11 +83,12 @@ if __name__ == '__main__':
     list = rt.reader_dist() #retorna distancias
     ids_list = rt.read_id(list[0]) #retorna os ids
     ind_list = indexx(list[2])
+    vertices = []
+    caps = []
 
     copy_indlist = ind_list[:]
-    print(copy_indlist)
-    # preenche uma lista com os objetos vertices
-    vertices = []
+
+
     for v in range(list[0]):
         #id, id_real, linked, size
         vertice = Vertice(v, ids_list[v], 0, list[2][v], 0)
@@ -98,26 +99,16 @@ if __name__ == '__main__':
     for i in range(len(ind_list)):
         vertices[ind_list[i]].hub = 1
         vertices[ind_list[i]].linked = -1
+        vertices[ind_list[i]].size = int(list[1])
+        caps.append(vertices[ind_list[i]].size)
+
 
     # for v in range(list[0]):
     #     Vertice.print_vertice(vertices[v])
 
-    for v in range(list[0]):
-        Vertice.print_vertice(vertices[v])
 
 
-    print(len(vertices))
-    f_index = []
     for i in range(len(vertices)):
-        #se for um hub pula pro proximo
-        #ir no vertice i veriricar qual a menor distancia dentre os tres hubs
-        #enquanto o vertice nao estiver linkado
-        #achou a menor distancia verificar se naquele hub ainda tem espaço
-            #se tiver linka
-            #se nao pula para o proximo hub
-                #remove elemento da lista e chama a funcao q encontra o menor valor entre aquela nova lista
-        # vertices_distancia = vertice[n].distancia[0]
-        #lista de index que nao cabem mais nada
         if i not in ind_list:
             n = small_distance(ind_list, vertices[i].distancias[0])
             copy_indlist = ind_list[:]
@@ -129,8 +120,43 @@ if __name__ == '__main__':
                     remove = copy_indlist.index(n)
                     copy_indlist.pop(remove)
                     n = small_distance(copy_indlist, vertices[i].distancias[0])
-        else:
-            print('hub')
 
-    for v in range(list[0]):
-        Vertice.print_vertice(vertices[v])
+
+
+    vert = []
+    sum_distance = 0
+    for i in range(len(ind_list)):
+        aux = []
+        for j in range(len(ids_list)):
+            if vertices[j].linked == ind_list[i]:
+                aux.append(j)
+                sum_distance += float(vertices[j].distancias[0][ind_list[i]])
+        vert.append(aux)
+
+
+    ids = []
+    for x in range(len(ind_list)):
+        ids.append(vertices[ind_list[x]].id)
+
+
+
+    hubs = []
+    for i in range(len(ind_list)):
+        hub = Hub(ids[i], caps[i], vert[i])
+        hubs.append(hub)
+
+    print('Distancia total: ',sum_distance)
+    print('Hub / Size do Hub / Nós Conectados')
+    for h in range(len(ind_list)):
+        Hub.print_hubs(hubs[h])
+
+
+
+
+
+
+
+
+
+
+
