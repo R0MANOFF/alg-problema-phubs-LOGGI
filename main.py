@@ -1,9 +1,3 @@
-# Equanto existir vértice não associado a algum hub, faça:
-# 	2.1. escolher o vertice V mais próximo
-# 		2.1.1 V ainda não foi atribuido a nenhum hub
-# 		2.1.2 V nao ultrapassa a capacidade do hub
-# 	2.2. atribuir V ao respectivo hub
-# 		2.2.1 atualizar a capacidade do hub
 import copy
 #import read_json as rj
 import read_txt as rt
@@ -53,11 +47,7 @@ def biggest_value(sizes): #choose hub with the biggest size
     #retorna index
 
 
-#funcao para determinar qual hub tem a menor distancia para o vertice
-#recebe lista dos indexes dos hubs
-#retorna index do hub de menor distancia
 
-#vertices_distancia = vertice[n].distancia[0]
 def small_distance(hubs_index, vertices_distancia):
     lowest = float(1000)
     indice = 0
@@ -124,13 +114,15 @@ if __name__ == '__main__':
 
 
     vert = []
-    sum_distance = 0
+    sum_distance = []
     for i in range(len(ind_list)):
         aux = []
+        sum_distance_aux = 0
         for j in range(len(ids_list)):
             if vertices[j].linked == ind_list[i]:
                 aux.append(j)
-                sum_distance += float(vertices[j].distancias[0][ind_list[i]])
+                sum_distance_aux += float(vertices[j].distancias[0][ind_list[i]])
+        sum_distance.append(sum_distance_aux)
         vert.append(aux)
 
 
@@ -142,11 +134,11 @@ if __name__ == '__main__':
 
     hubs = []
     for i in range(len(ind_list)):
-        hub = Hub(ids[i], caps[i], vert[i])
+        hub = Hub(ids[i], caps[i], vert[i], sum_distance[i])
         hubs.append(hub)
 
-    print('Distancia total: ',sum_distance)
-    print('Hub / Size do Hub / Nós Conectados')
+
+    print("Hub / Size do Hub / No's Conectados /Distancia total")
     for h in range(len(ind_list)):
         Hub.print_hubs(hubs[h])
 

@@ -18,10 +18,11 @@ class Vertice():
       return 0
 
 class Hub():
-  def __init__(self, id, capacity, vertices):
+  def __init__(self, id, capacity, vertices, distance):
     self.id = id
     self.capacity = capacity
     self.vertices = vertices
+    self.distance = distance
 
   def print_hubs(self):
-    print(self.id, self.capacity, self.vertices)
+    print( self.id, self.capacity, self.vertices, self.distance)
