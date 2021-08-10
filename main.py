@@ -2,6 +2,7 @@ import copy
 #import read_json as rj
 import read_txt as rt
 from hubs import Vertice, Hub
+import random
 
 
 def not_linked(vertices):
@@ -18,33 +19,15 @@ def not_linked(vertices):
 
 def indexx(sizes):
     ind = []
-    aux = sizes[:]
-    n = biggest_value(aux)
+    n = random.randrange(10)
     ind.append(n)
-    aux[n] = 1
 
-    for b in range(len(sizes)):
-        if b not in ind:
-            n = biggest_value(aux)
-            if len(ind) < 2:
-                ind.append(n)
-                aux[n] = 1
+    while len(ind) < 2:
+        x = random.randrange(10)
+        if x not in ind:
+            ind.append(x)
 
     return ind    #retorna lista de index dos maiores valores
-
-
-
-
-def biggest_value(sizes): #choose hub with the biggest size
-    biggest = 0;
-    index = 0
-    for i in range(len(sizes)):
-        if int(sizes[i]) >= biggest:
-            biggest = int(sizes[i])
-            index = i
-
-    return index
-    #retorna index
 
 
 
@@ -76,7 +59,6 @@ if __name__ == '__main__':
     vertices = []
     caps = []
 
-    copy_indlist = ind_list[:]
 
 
     for v in range(list[0]):
@@ -99,10 +81,12 @@ if __name__ == '__main__':
 
 
     for i in range(len(vertices)):
+        x = 0
         if i not in ind_list:
             n = small_distance(ind_list, vertices[i].distancias[0])
-            copy_indlist = ind_list[:]
-            while vertices[i].linked == 0:
+            copy_indlist = ind_list.copy()
+            while vertices[i].linked == 0 and x < len(ind_list):
+                x += 1
                 if vertices[n].size >= vertices[i].size:  #se o size do hub for maior q o size do vertice
                     vertices[i].linked = n
                     vertices[n].size -= vertices[i].size
@@ -115,6 +99,7 @@ if __name__ == '__main__':
 
     vert = []
     sum_distance = []
+    sum = 0
     for i in range(len(ind_list)):
         aux = []
         sum_distance_aux = 0
@@ -122,14 +107,14 @@ if __name__ == '__main__':
             if vertices[j].linked == ind_list[i]:
                 aux.append(j)
                 sum_distance_aux += float(vertices[j].distancias[0][ind_list[i]])
+                sum += float(vertices[j].distancias[0][ind_list[i]])
         sum_distance.append(sum_distance_aux)
         vert.append(aux)
 
-
+    
     ids = []
     for x in range(len(ind_list)):
         ids.append(vertices[ind_list[x]].id)
-
 
 
     hubs = []
@@ -137,10 +122,12 @@ if __name__ == '__main__':
         hub = Hub(ids[i], caps[i], vert[i], sum_distance[i])
         hubs.append(hub)
 
-
+    print('Soma total:', sum)
     print("Hub / Size do Hub / No's Conectados /Distancia total")
     for h in range(len(ind_list)):
         Hub.print_hubs(hubs[h])
+    
+
 
 
 

@@ -25,4 +25,4 @@ class Hub():
     self.distance = distance
 
   def print_hubs(self):
-    print( self.id, self.capacity, self.vertices, self.distance)
+    print( self.id, self.capacity, self.vertices)
