@@ -30,6 +30,38 @@ def indexx(sizes):
     return ind    #retorna lista de index dos maiores valores
 
 
+'''
+
+def indexx(sizes):
+    ind = []
+    aux = sizes[:]
+    n = biggest_value(aux)
+    ind.append(n)
+    aux[n] = 1
+
+    for b in range(len(sizes)):
+        if b not in ind:
+            n = biggest_value(aux)
+            if len(ind) < 2:
+                ind.append(n)
+                aux[n] = 1
+
+    return ind    #retorna lista de index dos maiores valores
+
+
+
+
+def biggest_value(sizes): #choose hub with the biggest size
+    biggest = 0;
+    index = 0
+    for i in range(len(sizes)):
+        if int(sizes[i]) >= biggest:
+            biggest = int(sizes[i])
+            index = i
+
+    return index
+    #retorna index
+'''
 
 def small_distance(hubs_index, vertices_distancia):
     lowest = float(1000)
@@ -75,9 +107,8 @@ if __name__ == '__main__':
         caps.append(vertices[ind_list[i]].size)
 
 
-    # for v in range(list[0]):
-    #     Vertice.print_vertice(vertices[v])
-
+    for v in range(list[0]):
+        Vertice.print_vertice(vertices[v])
 
 
     for i in range(len(vertices)):
@@ -97,8 +128,9 @@ if __name__ == '__main__':
 
 
 
-    vert = []
-    sum_distance = []
+
+    vert = [] #vertices ligados ao hub
+    sum_distance = [] 
     sum = 0
     for i in range(len(ind_list)):
         aux = []
@@ -127,6 +159,77 @@ if __name__ == '__main__':
     for h in range(len(ind_list)):
         Hub.print_hubs(hubs[h])
     
+    
+    h1 = len(hubs)    
+
+    for i in range(h1-1): #vai comparar o vetor atual com o proximo 
+        for j in range(len(hubs[i].vertices)): #percorrer array de indices
+            for k in range(len(hubs[i+1].vertices)): 
+                indi_vertice_1 = hubs[i].vertices[j]
+                indi_vertice_2 = hubs[i+1].vertices[k]
+                indi_hubs = ids.copy()
+
+                #calcular o custo
+                n = float(vertices[indi_vertice_1].distancias[0][indi_hubs[i]]) #recebe distancia do ponto p para o hub h
+                n2 = float(vertices[indi_vertice_2].distancias[0][indi_hubs[i]])
+                aux_sum = hubs[i].distance
+                aux_sum = aux_sum - n + n2
+                
+                n = float(vertices[indi_vertice_1].distancias[0][indi_hubs[i+1]])
+                n2 = float(vertices[indi_vertice_2].distancias[0][indi_hubs[i+1]])
+                aux_sum2 = hubs[i+1].distance
+                aux_sum2 = aux_sum2 + n - n2
+                
+                aux_sum = aux_sum + aux_sum2
+                if aux_sum < sum:
+                    hubs[i].vertices[j] = indi_vertice_2
+                    print('\n',indi_vertice_1,'\n')
+                    hubs[i+1].vertices[k] = indi_vertice_1
+                    print('\n',indi_vertice_2,'\n')
+                    sum = aux_sum
+                    print(sum)
+        
+
+    print('-'*50)
+    print('Soma total:', sum)
+    print("Hub / Size do Hub / No's Conectados /Distancia total")
+    for h in range(len(ind_list)):
+        Hub.print_hubs(hubs[h])  
+    print('-'*50)
+            
+            
+            
+
+'''
+    for i in range(h1):
+        if len(hubs) == 2:
+            for j in range(len(hubs[1].vertices)):
+                aux = hubs[0].vertices[i]
+                aux2 = hubs[1].vertices[j]
+                a_dist = hubs[0].distance
+                b_dist = hubs[1].distance
+
+                indices_hub = ids.copy()
+                indices_vertices = [aux, aux2]
+                n = small_distance(indices_hub, vertices[indices_vertices[i]].distancias[0])
+                print(n)
+
+
+                hubs[0].vertices[i] = aux2
+                hubs[1].vertices[j] = aux
+                #somar a distancia novamente
+                
+                #diminuir distancia daquele indice da distancia total e somar a do novo indice associado e se for menor trocar a distancia total
+                print(vertices[aux].distancias[0])
+                print(vertices[aux2].distancias[0])
+                break
+            break
+'''
+    
+
+        
+      
+
 
 
 
