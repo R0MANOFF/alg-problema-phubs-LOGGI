@@ -30,40 +30,7 @@ def indexx(sizes):
     return ind    #retorna lista de index dos maiores valores
 
 
-'''
-
-def indexx(sizes):
-    ind = []
-    aux = sizes[:]
-    n = biggest_value(aux)
-    ind.append(n)
-    aux[n] = 1
-
-    for b in range(len(sizes)):
-        if b not in ind:
-            n = biggest_value(aux)
-            if len(ind) < 2:
-                ind.append(n)
-                aux[n] = 1
-
-    return ind    #retorna lista de index dos maiores valores
-
-
-
-
-def biggest_value(sizes): #choose hub with the biggest size
-    biggest = 0;
-    index = 0
-    for i in range(len(sizes)):
-        if int(sizes[i]) >= biggest:
-            biggest = int(sizes[i])
-            index = i
-
-    return index
-    #retorna index
-'''
-
-def small_distance(hubs_index, vertices_distancia):
+def small_distance(hubs_index, vertices_distancia): 
     lowest = float(1000)
     indice = 0
     for i in range(len(hubs_index)):
@@ -72,8 +39,6 @@ def small_distance(hubs_index, vertices_distancia):
             indice = hubs_index[i]
 
     return indice
-
-
 
 
 
@@ -95,13 +60,12 @@ if __name__ == '__main__':
 
     for v in range(list[0]):
         #id, id_real, linked, size
-        vertice = Vertice(v, ids_list[v], 0, list[2][v], 0)
+        vertice = Vertice(v, ids_list[v], 0, list[2][v])
         vertices.append(vertice)
         vertices[v].distancias.append(list[3][v])
 
 
     for i in range(len(ind_list)):
-        vertices[ind_list[i]].hub = 1
         vertices[ind_list[i]].linked = -1
         vertices[ind_list[i]].size = int(list[1])
         caps.append(vertices[ind_list[i]].size)
@@ -181,13 +145,25 @@ if __name__ == '__main__':
                 aux_sum2 = aux_sum2 + n - n2
                 
                 aux_sum = aux_sum + aux_sum2
-                if aux_sum < sum:
-                    hubs[i].vertices[j] = indi_vertice_2
-                    print('\n',indi_vertice_1,'\n')
-                    hubs[i+1].vertices[k] = indi_vertice_1
-                    print('\n',indi_vertice_2,'\n')
-                    sum = aux_sum
-                    print(sum)
+
+                #aumentar distancia no hub com o tamanho do vertice que esta sendo desalocado uma vez que diminui anteriormente
+                #diminuir size do novo vetor
+
+                vertices[hubs[i].id].size = vertices[hubs[i].id].size + vertices[indi_vertice_1].size - vertices[indi_vertice_2].size
+                vertices[hubs[i+1].id].size = vertices[hubs[i+1].id].size + vertices[indi_vertice_2].size - vertices[indi_vertice_1].size
+                
+                
+                if vertices[hubs[i].id].size >= 0 and vertices[hubs[i+1].id].size >= 0:
+                    if aux_sum < sum:
+                        hubs[i].vertices[j] = indi_vertice_2
+                        print('\n',indi_vertice_1,'\n')
+                        hubs[i+1].vertices[k] = indi_vertice_1
+                        print('\n',indi_vertice_2,'\n')
+                        sum = aux_sum
+                        print(sum)
+                else:
+                    vertices[hubs[i].id].size = vertices[hubs[i].id].size - vertices[indi_vertice_1].size + vertices[indi_vertice_2].size
+                    vertices[hubs[i+1].id].size = vertices[hubs[i+1].id].size - vertices[indi_vertice_2].size + vertices[indi_vertice_1].size
         
 
     print('-'*50)
@@ -199,32 +175,6 @@ if __name__ == '__main__':
             
             
             
-
-'''
-    for i in range(h1):
-        if len(hubs) == 2:
-            for j in range(len(hubs[1].vertices)):
-                aux = hubs[0].vertices[i]
-                aux2 = hubs[1].vertices[j]
-                a_dist = hubs[0].distance
-                b_dist = hubs[1].distance
-
-                indices_hub = ids.copy()
-                indices_vertices = [aux, aux2]
-                n = small_distance(indices_hub, vertices[indices_vertices[i]].distancias[0])
-                print(n)
-
-
-                hubs[0].vertices[i] = aux2
-                hubs[1].vertices[j] = aux
-                #somar a distancia novamente
-                
-                #diminuir distancia daquele indice da distancia total e somar a do novo indice associado e se for menor trocar a distancia total
-                print(vertices[aux].distancias[0])
-                print(vertices[aux2].distancias[0])
-                break
-            break
-'''
     
 
         
