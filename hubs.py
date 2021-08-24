@@ -10,11 +10,6 @@ class Vertice():
   def print_vertice(self):
     print(self.id, self.id_real, self.linked, self.size, self.distancias)
 
-  def menor_size(self, size, size2):
-    if self.size <= self.size:
-      return 1
-    else:
-      return 0
 
 class Hub():
   def __init__(self, id, capacity, vertices, distance):

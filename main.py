@@ -143,6 +143,8 @@ if __name__ == '__main__':
                     #Increase the cost at the hub with the size of the vertex who's being deallocated and decrease the cost of the new vertex
                     vertices[hubs[i].id].size = vertices[hubs[i].id].size + vertices[indi_vertice_1].size - vertices[indi_vertice_2].size
                     vertices[hubs[i+1].id].size = vertices[hubs[i+1].id].size + vertices[indi_vertice_2].size - vertices[indi_vertice_1].size
+
+                    
                     
                     #check if the hub has space for the vertex and if the cost deacreses
                     if vertices[hubs[i].id].size >= 0 and vertices[hubs[i+1].id].size >= 0:
@@ -155,6 +157,10 @@ if __name__ == '__main__':
                         vertices[hubs[i].id].size = vertices[hubs[i].id].size - vertices[indi_vertice_1].size + vertices[indi_vertice_2].size
                         vertices[hubs[i+1].id].size = vertices[hubs[i+1].id].size - vertices[indi_vertice_2].size + vertices[indi_vertice_1].size
         
+        print('-'*50)
+        print('Custo:', sum)
+        print('-'*50)
+
         #check what is the best solution
         if sum < best_cost:
             best_cost = sum
@@ -166,7 +172,7 @@ if __name__ == '__main__':
 
     print('-'*50)
     print('Melhor custo:', best_cost)
-    print("Hub / Size do Hub / No's Conectados /Distancia total")
+    print("Hub / Size do Hub / No's Conectados")
     for h in range(len(ind_list)):
         Hub.print_hubs(best_solution[h])  
     print('-'*50)
