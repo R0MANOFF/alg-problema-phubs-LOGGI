@@ -177,22 +177,3 @@ if __name__ == '__main__':
         Hub.print_hubs(best_solution[h])  
     print('-'*50)
             
-            
-            
-    
-
-        
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
