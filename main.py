@@ -1,5 +1,6 @@
 import copy
-#import read_json as rj
+import time
+import read_json as rj
 import read_txt as rt
 from hubs import Vertice, Hub
 import random
@@ -19,11 +20,11 @@ def not_linked(vertices):
 
 def indexx(sizes):
     ind = []
-    n = random.randrange(10)
+    n = random.randrange(199)
     ind.append(n)
 
-    while len(ind) < 2: #amount of index set manually;
-        x = random.randrange(10)
+    while len(ind) < 7: #amount of index set manually;
+        x = random.randrange(199)
         if x not in ind:
             ind.append(x)
 
@@ -40,12 +41,19 @@ def small_distance(hubs_index, vertices_distancia):
 
     return indice
 
+def totalsize(instances):
+    sum = 0
+    for i in range(len(instances)):
+        sum += instances[i]
+    return sum
 
+#mudar essa formula amanha para a formula q o professor falou la
 
 if __name__ == '__main__':
+    timei = time.time()
 
-    # rj.create_relation()
-    # rj.create_routes()
+    rj.create_relation()
+    rj.create_routes()
 
 
     # qntd instancias, capacidade total, tamanho de cada instancia(lista), distancias entrepontos(lista de listas)
@@ -53,6 +61,8 @@ if __name__ == '__main__':
     list = rt.reader_dist() #retorna distancias
     ids_list = rt.read_id(list[0]) #retorna os ids
     contador = 0
+    sizehub = totalsize(list[2])
+    print(sizehub)
     best_cost = 100000000000000
     best_solution = None
 
@@ -71,12 +81,12 @@ if __name__ == '__main__':
 
         for i in range(len(ind_list)):
             vertices[ind_list[i]].linked = -1
-            vertices[ind_list[i]].size = int(list[1])
+            vertices[ind_list[i]].size = 170 #tamanho do hub
             caps.append(vertices[ind_list[i]].size)
 
 
         #for v in range(list[0]):
-        #    Vertice.print_vertice(vertices[v]) 
+        #    Vertice.print_vertice(vertices[v])
 
         for i in range(len(vertices)):
             x = 0
@@ -167,8 +177,9 @@ if __name__ == '__main__':
             best_solution = hubs
 
         contador += 1
-        
-            
+
+    timef = time.time()
+    totaltime = timef - timei
 
     print('-'*50)
     print('Melhor custo:', best_cost)
@@ -176,4 +187,6 @@ if __name__ == '__main__':
     for h in range(len(ind_list)):
         Hub.print_hubs(best_solution[h])  
     print('-'*50)
-            
+
+
+    print(totaltime)

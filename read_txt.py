@@ -3,7 +3,7 @@ def reader_dist():
     sizes = []
     distancias = []
 
-    with open('arquivos/distancia/dados-distancia-07-28-2021.txt', 'r') as f:
+    with open('arquivos/distancia/dados-distancia-200-rj-08-27-2021.txt', 'r') as f:
       linhas = f.readlines()
       date = linhas[0]
 
@@ -23,7 +23,7 @@ def reader_dist():
 
 def read_id(instancias):
     ids_list = []
-    with open('arquivos/ids/dados-relacao-ids-07-28-2021.txt', 'r') as id:
+    with open('arquivos/ids/dados-relacao-ids-200-rj-08-27-2021.txt', 'r') as id:
         date = id.readline()
         ids = id.readlines()
         for id in range(1, instancias + 1):

@@ -6,9 +6,9 @@ from datetime import datetime
 
 
 
-instancias = 10
+instancias = 200
 
-gmaps = googlemaps.Client(key='AIzaSyDWH2mM7H8NT0QEtJt79lg6jg_ourgB0Cw')
+gmaps = googlemaps.Client(key='AIzaSyB35D3XUh7QXTLmxUtpc3OJqpRWowToQ5w')
 
 colunas = ['Distancia']
 matriz = pd.DataFrame(columns=colunas)
@@ -20,7 +20,7 @@ def ler_json(arq_json):
 
 
 
-data = ler_json('arquivo.json')
+data = ler_json('instances/arquivo200rj.json')
 
 capacity = data['vehicle_capacity']
 deliveries = data['deliveries']
@@ -29,7 +29,7 @@ time = datetime.now()
 
 
 def create_relation():
-    arc = ('arquivos/ids/dados-relacao-ids-' + time.strftime("%m-%d-%Y") + '.txt')
+    arc = ('arquivos/ids/dados-relacao-ids-200-rj-' + time.strftime("%m-%d-%Y") + '.txt')
     with open(arc, 'w') as file:
         file.write(time.strftime("%m-%d-%Y-%H:%M\n"))
         file.write('CHAVE ---->  ID \n')
@@ -42,7 +42,7 @@ def create_relation():
 
 
 def create_routes():
-    arc = ('arquivos/distancia/dados-distancia-' + time.strftime("%m-%d-%Y") + '.txt')
+    arc = ('arquivos/distancia/dados-distancia-200-rj-' + time.strftime("%m-%d-%Y") + '.txt')
 
     with open(arc, 'w') as file:
         file.write(time.strftime("%m-%d-%Y-%H:%M\n"))
