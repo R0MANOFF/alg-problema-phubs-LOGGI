@@ -52,8 +52,8 @@ def totalsize(instances):
 if __name__ == '__main__':
     timei = time.time()
 
-    rj.create_relation()
-    rj.create_routes()
+    #rj.create_relation()
+    #rj.create_routes()
 
 
     # qntd instancias, capacidade total, tamanho de cada instancia(lista), distancias entrepontos(lista de listas)
@@ -81,7 +81,7 @@ if __name__ == '__main__':
 
         for i in range(len(ind_list)):
             vertices[ind_list[i]].linked = -1
-            vertices[ind_list[i]].size = 170 #tamanho do hub
+            vertices[ind_list[i]].size = 175 #tamanho do hub
             caps.append(vertices[ind_list[i]].size)
 
 
@@ -189,4 +189,4 @@ if __name__ == '__main__':
     print('-'*50)
 
 
-    print(totaltime)
+    print("Tempo: ", totaltime)
