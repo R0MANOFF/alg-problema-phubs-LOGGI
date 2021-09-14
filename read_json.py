@@ -8,7 +8,7 @@ from datetime import datetime
 
 instancias = 200
 
-gmaps = googlemaps.Client(key='AIzaSyB35D3XUh7QXTLmxUtpc3OJqpRWowToQ5w')
+#gmaps = your key here
 
 colunas = ['Distancia']
 matriz = pd.DataFrame(columns=colunas)
